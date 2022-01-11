@@ -647,3 +647,8 @@ enable_mlir = config.define_bool_state(
     default=lib.mlir_api_version >= 1,
     help=('Enables an experimental code path that compiles JAX programs via '
           'emitting the MLIR MHLO dialect.'))
+
+bcoo_cusparse_lowering = config.define_bool_state(
+    name='jax_bcoo_cusparse_lowering',
+    default=False,
+    help=('Enables lowering BCOO ops to cuSparse.'))

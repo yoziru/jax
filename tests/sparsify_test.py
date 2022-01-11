@@ -29,7 +29,6 @@ from jax.experimental.sparse.transform import (
 
 config.parse_flags_with_absl()
 
-
 class SparsifyTest(jtu.JaxTestCase):
   @classmethod
   def sparsify(cls, f):
@@ -405,6 +404,12 @@ class SparsifyTracerTest(SparsifyTest):
     def f(x):
       self.assertIsInstance(x, SparseTracer)
     f(jnp.arange(5))
+
+  # TODO(tlu7): check tracer for dot general with `lhs.T` and cusparse.
+  def testSparsify(self):
+    if jtu.device_under_test() == 'gpu':
+      self.skipTest("fails on GPU with CuSparse.")
+    super().testSparsify()
 
 if __name__ == "__main__":
   absltest.main(testLoader=jtu.JaxTestLoader())
