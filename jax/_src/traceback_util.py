@@ -71,9 +71,6 @@ def filter_traceback(tb):
   for f, lineno in reversed(frames):
     if include_frame(f):
       out = types.TracebackType(out, f, f.f_lasti, lineno)  # pytype: disable=wrong-arg-count
-  if out is None and len(frames) > 0:
-    f, lineno = frames[-1]
-    out = types.TracebackType(out, f, f.f_lasti, lineno)
   return out
 
 def add_call_stack_frames(tb):
@@ -175,8 +172,6 @@ def api_boundary(fun: C) -> C:
       filtered_tb, unfiltered, mode = None, None, None
       try:
         filtered_tb = filter_traceback(e.__traceback__)
-        if filtered_tb is None:
-          raise
         msg = format_exception_only(e)
         msg = f'{msg}\n\n{_jax_message_append}'
         unfiltered = UnfilteredStackTrace(msg)
